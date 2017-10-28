@@ -1,0 +1,34 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  color: #2f1d05;
+}
+.mb-0 {
+  margin-bottom: 0;
+}
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+.mb-2 {
+  margin-bottom: 1rem;
+}
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
+h1 {
+  margin-top: 1.5rem;
+}
+.input-notes {
+  margin-bottom: 1.5rem;
+}
+/* FieldFeedbacks */
+.input-notes .error {
+  color: #cc2611;
+}
+.input-notes .warning {
+  color: #d38719;
+}
+.input-notes .info {
+  color: #253f8e;
+}

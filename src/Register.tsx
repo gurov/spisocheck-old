@@ -8,6 +8,7 @@ interface State {
     username: string;
     password: string;
     passwordConfirm: string;
+    loading: boolean;
     submitButtonDisabled: boolean;
 }
 
@@ -23,6 +24,7 @@ export default class Register extends React.Component<Props, State> {
             username: '',
             password: '',
             passwordConfirm: '',
+            loading: false,
             submitButtonDisabled: false
         };
 
@@ -56,7 +58,12 @@ export default class Register extends React.Component<Props, State> {
         this.setState({submitButtonDisabled: !this.form.isValid()});
 
         if (this.form.isValid()) {
-            alert(`Valid form\n\nthis.state =\n${JSON.stringify(this.state, null, 2)}`);
+            this.setState({loading: true});
+            setTimeout(() => {
+                alert(`Valid form\n\nthis.state =\n${JSON.stringify(this.state, null, 2)}`);
+                this.setState({loading: false});
+            }, 2000);
+
         }
     }
 
@@ -97,7 +104,7 @@ export default class Register extends React.Component<Props, State> {
                         </FieldFeedbacks>
                     </div>
 
-                    <div className="offset-by-three six columns" >
+                    <div className="offset-by-three six columns">
                         <label htmlFor="password-confirm">Повторите пароль</label>
                         <input type="password" name="passwordConfirm" id="password-confirm"
                                className="u-full-width mb-0"
@@ -109,8 +116,9 @@ export default class Register extends React.Component<Props, State> {
                         </FieldFeedbacks>
                     </div>
                     <div className="offset-by-three six columns">
-                        <button className="button-primary" disabled={this.state.submitButtonDisabled}>
-                            Зарегистрироваться
+                        <button className="button-primary"
+                                disabled={this.state.submitButtonDisabled || this.state.loading}>
+                            Зарегистрироваться {this.state.loading && <img src="loader.gif"/>}
                         </button>
                     </div>
 

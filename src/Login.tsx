@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { FieldFeedback, FieldFeedbacks, FormWithConstraints } from 'react-form-with-constraints';
+import { Link } from 'react-router-dom';
+import * as firebase from 'firebase';
 
 interface Props {
 }
 
 interface State {
-    username: string;
+    email: string;
     password: string;
     loading: boolean;
     submitButtonDisabled: boolean;
@@ -20,7 +22,7 @@ export default class Login extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            username: '',
+            email: '',
             password: '',
             loading: false,
             submitButtonDisabled: false
@@ -28,6 +30,7 @@ export default class Login extends React.Component<Props, State> {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.restorePassword = this.restorePassword.bind(this);
     }
 
     handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -41,6 +44,10 @@ export default class Login extends React.Component<Props, State> {
         });
     }
 
+    restorePassword(e: any) {
+        e.preventDefault();
+        alert(`Valid form\n\nthis.state =\n${JSON.stringify(this.state, null, 2)}`);
+    }
 
     handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -51,11 +58,18 @@ export default class Login extends React.Component<Props, State> {
 
         if (this.form.isValid()) {
             this.setState({loading: true});
-            setTimeout(() => {
-                alert(`Valid form\n\nthis.state =\n${JSON.stringify(this.state, null, 2)}`);
-                this.setState({loading: false});
-            }, 2000);
 
+            firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+                .then(() => {
+                    alert(`All good`);
+                })
+                .catch(error => {
+                    alert(`Login failed
+                        Code: ${error.code}
+                        Message: ${error.message}
+                    `);
+                })
+                .then(() => this.setState({loading: false}));
         }
     }
 
@@ -72,12 +86,12 @@ export default class Login extends React.Component<Props, State> {
                     onSubmit={this.handleSubmit}
                     noValidate>
                     <div className="offset-by-three six columns">
-                        <label htmlFor="username">Email</label>
-                        <input type="email" name="username" id="username"
+                        <label htmlFor="email">Email</label>
+                        <input type="email" name="email" id="email"
                                className="u-full-width mb-0"
-                               value={this.state.username} onChange={this.handleChange}
+                               value={this.state.email} onChange={this.handleChange}
                                required minLength={3}/>
-                        <FieldFeedbacks for="username" className="input-notes">
+                        <FieldFeedbacks for="email" className="input-notes">
                             <FieldFeedback when="tooShort">Минимум 3 символа</FieldFeedback>
                             <FieldFeedback when="*"/>
                         </FieldFeedbacks>
@@ -101,7 +115,9 @@ export default class Login extends React.Component<Props, State> {
 
                 </FormWithConstraints>
                 <hr/>
-
+                <div className="offset-by-three six columns">
+                    <Link to="register">Зарегистрироваться</Link> или <a href="" onClick={this.restorePassword}>отправить ссылку</a> для восстановления пароля на <b>{this.state.email}</b>.
+                </div>
             </div>
         );
     }

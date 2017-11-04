@@ -10,6 +10,19 @@ import { HashRouter, Redirect, Route } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Profile from './Profile';
+import * as firebase from 'firebase';
+
+let config = {
+    apiKey: 'AIzaSyD9DESNq4FR6ddtwydMxkJMfu10Ccs4PTQ',
+    authDomain: 'control-list.firebaseapp.com',
+    databaseURL: 'https://control-list.firebaseio.com',
+    projectId: 'control-list',
+    storageBucket: 'control-list.appspot.com',
+    messagingSenderId: '735172718450'
+};
+
+firebase.initializeApp(config); // tslint:disable
+
 
 let isAuth = false;
 

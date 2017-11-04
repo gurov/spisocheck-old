@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { FieldFeedback, FieldFeedbacks, FormWithConstraints } from 'react-form-with-constraints';
+import { Link } from 'react-router-dom';
 
 interface Props {
 }
 
 interface State {
-    username: string;
+    email: string;
     password: string;
     passwordConfirm: string;
     loading: boolean;
@@ -21,7 +22,7 @@ export default class Register extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            username: '',
+            email: '',
             password: '',
             passwordConfirm: '',
             loading: false,
@@ -80,12 +81,12 @@ export default class Register extends React.Component<Props, State> {
                     onSubmit={this.handleSubmit}
                     noValidate>
                     <div className="offset-by-three six columns">
-                        <label htmlFor="username">Email</label>
-                        <input type="email" name="username" id="username"
+                        <label htmlFor="email">Email</label>
+                        <input type="email" name="email" id="email"
                                className="u-full-width mb-0"
-                               value={this.state.username} onChange={this.handleChange}
+                               value={this.state.email} onChange={this.handleChange}
                                required minLength={3}/>
-                        <FieldFeedbacks for="username" className="input-notes">
+                        <FieldFeedbacks for="email" className="input-notes">
                             <FieldFeedback when="tooShort">Минимум 3 символа</FieldFeedback>
                             <FieldFeedback when="*"/>
                         </FieldFeedbacks>
@@ -121,8 +122,11 @@ export default class Register extends React.Component<Props, State> {
                             Зарегистрироваться {this.state.loading && <img src="loader.gif"/>}
                         </button>
                     </div>
-
                 </FormWithConstraints>
+                <hr/>
+                <div className="offset-by-three six columns">
+                    Уже есть аккаунт? <Link to="login">Войти</Link>
+                </div>
             </div>
         );
     }

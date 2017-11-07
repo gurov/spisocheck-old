@@ -2,6 +2,7 @@ import * as React from 'react';
 import { FieldFeedback, FieldFeedbacks, FormWithConstraints } from 'react-form-with-constraints';
 import { Link } from 'react-router-dom';
 import * as firebase from 'firebase';
+import { errorHandler } from './helpers';
 
 interface Props {
 }
@@ -46,7 +47,12 @@ export default class Login extends React.Component<Props, State> {
 
     restorePassword(e: any) {
         e.preventDefault();
-        alert(`Valid form\n\nthis.state =\n${JSON.stringify(this.state, null, 2)}`);
+        const restore = confirm(`Send email for reset password to ${this.state.email}?`);
+        if (restore) {
+            firebase.auth().sendPasswordResetEmail(this.state.email)
+                .then(() => alert(`Reset email sent to ${this.state.email}`))
+                .catch(errorHandler());
+        }
     }
 
     handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -60,12 +66,8 @@ export default class Login extends React.Component<Props, State> {
             this.setState({loading: true});
 
             firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-                .then(() => {
-                    alert(`All good`);
-                })
-                .catch(error => {
-                    alert(`Login failed\n\nCode: ${error.code}\nMessage: ${error.message}`);
-                })
+                .then(() => alert(`All good`))
+                .catch(errorHandler('Login failed'))
                 .then(() => this.setState({loading: false}));
         }
     }

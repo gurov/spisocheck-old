@@ -2,6 +2,7 @@ import * as React from 'react';
 import { FieldFeedback, FieldFeedbacks, FormWithConstraints } from 'react-form-with-constraints';
 import { Link } from 'react-router-dom';
 import * as firebase from 'firebase';
+import { errorHandler } from './helpers';
 
 interface Props {
 }
@@ -58,7 +59,6 @@ export default class Register extends React.Component<Props, State> {
         e.preventDefault();
 
         this.form.validateFields();
-
         this.setState({submitButtonDisabled: !this.form.isValid()});
 
         if (this.form.isValid()) {
@@ -69,19 +69,16 @@ export default class Register extends React.Component<Props, State> {
                 .then(() => {
                     const user = firebase.auth().currentUser;
                     if (user) {
-                        user.updateProfile({
+                        const profile = {
                             displayName: this.state.displayName,
                             photoURL: null
-                        }).then(function () {
-                            alert('Good');
-                        }).catch(error => {
-                            alert(`Update display name failed\n\nCode: ${error.code}\nMessage: ${error.message}`);
-                        });
+                        };
+                        user.updateProfile(profile)
+                            .then( () => alert('Good'))
+                            .catch(errorHandler('Update display name failed'));
                     }
                 })
-                .catch(error => {
-                    alert(`Login failed\n\nCode: ${error.code}\nMessage: ${error.message}`);
-                })
+                .catch(errorHandler('Register failed'))
                 .then(() => this.setState({loading: false}));
 
         }

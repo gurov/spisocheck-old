@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FieldFeedback, FieldFeedbacks, FormWithConstraints } from 'react-form-with-constraints';
 import { Link } from 'react-router-dom';
+import * as firebase from 'firebase';
 
 interface Props {
 }
@@ -9,6 +10,7 @@ interface State {
     email: string;
     password: string;
     passwordConfirm: string;
+    displayName: string;
     loading: boolean;
     submitButtonDisabled: boolean;
 }
@@ -25,6 +27,7 @@ export default class Register extends React.Component<Props, State> {
             email: '',
             password: '',
             passwordConfirm: '',
+            displayName: '',
             loading: false,
             submitButtonDisabled: false
         };
@@ -60,10 +63,26 @@ export default class Register extends React.Component<Props, State> {
 
         if (this.form.isValid()) {
             this.setState({loading: true});
-            setTimeout(() => {
-                alert(`Valid form\n\nthis.state =\n${JSON.stringify(this.state, null, 2)}`);
-                this.setState({loading: false});
-            }, 2000);
+            this.setState({loading: true});
+
+            firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+                .then(() => {
+                    const user = firebase.auth().currentUser;
+                    if (user) {
+                        user.updateProfile({
+                            displayName: this.state.displayName,
+                            photoURL: null
+                        }).then(function () {
+                            alert('Good');
+                        }).catch(error => {
+                            alert(`Update display name failed\n\nCode: ${error.code}\nMessage: ${error.message}`);
+                        });
+                    }
+                })
+                .catch(error => {
+                    alert(`Login failed\n\nCode: ${error.code}\nMessage: ${error.message}`);
+                })
+                .then(() => this.setState({loading: false}));
 
         }
     }
@@ -88,6 +107,18 @@ export default class Register extends React.Component<Props, State> {
                                required minLength={3}/>
                         <FieldFeedbacks for="email" className="input-notes">
                             <FieldFeedback when="tooShort">Минимум 3 символа</FieldFeedback>
+                            <FieldFeedback when="*"/>
+                        </FieldFeedbacks>
+                    </div>
+
+                    <div className="offset-by-three six columns">
+                        <label htmlFor="displayName">Отображаемое имя</label>
+                        <input type="text" name="displayName" id="displayName"
+                               className="u-full-width mb-0"
+                               value={this.state.displayName} onChange={this.handleChange}
+                               required minLength={1}/>
+                        <FieldFeedbacks for="displayName" className="input-notes">
+                            <FieldFeedback when="tooShort">Минимум 1 символ</FieldFeedback>
                             <FieldFeedback when="*"/>
                         </FieldFeedbacks>
                     </div>

@@ -64,10 +64,7 @@ export default class Login extends React.Component<Props, State> {
                     alert(`All good`);
                 })
                 .catch(error => {
-                    alert(`Login failed
-                        Code: ${error.code}
-                        Message: ${error.message}
-                    `);
+                    alert(`Login failed\n\nCode: ${error.code}\nMessage: ${error.message}`);
                 })
                 .then(() => this.setState({loading: false}));
         }

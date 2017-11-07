@@ -21,10 +21,10 @@ let config = {
     messagingSenderId: '735172718450'
 };
 
-firebase.initializeApp(config); // tslint:disable
-
-
 let isAuth = false;
+
+firebase.initializeApp(config);
+firebase.auth().onAuthStateChanged(user => isAuth = !!user);
 
 const PrivateRoute = ({component: Component, ...rest}: any) => (
     <Route {...rest} render={props => (

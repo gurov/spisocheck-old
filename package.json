@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "@types/jest": "^21.1.2",
+    "@types/notyf": "^2.0.0",
     "@types/react": "^16.0.10",
     "@types/react-dom": "^16.0.1",
     "@types/react-router-dom": "^4.2.0",
     "firebase": "4.6.1",
+    "notyf": "^2.0.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-form-with-constraints": "^0.6.2",

@@ -4,6 +4,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import 'skeleton-css/css/normalize.css';
 import 'skeleton-css/css/skeleton.css';
+import 'notyf/dist/notyf.min.css';
 import './index.css';
 
 import { HashRouter, Redirect, Route } from 'react-router-dom';

@@ -63,7 +63,6 @@ export default class Register extends React.Component<Props, State> {
 
         if (this.form.isValid()) {
             this.setState({loading: true});
-            this.setState({loading: true});
 
             firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then(() => {
